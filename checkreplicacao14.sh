@@ -96,23 +96,23 @@ fim(){
         if [ -e $TEMP/serieerro.pid ]
                 then
                         echo -e "Verifique se o servidor esta ligado e conectado a rede.\nEm caso positivo, entre em contato com o SuporteINFRA para solucionar o problema.">>$LOG
-                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" suporteinfra@shx.com.br < $LOG
+                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" seuemail < $LOG
                         touch $TEMP/falhareplicacao.pid
         elif [ -e $TEMP/pedierro.pid ]
                 then
                         echo -e "Verifique se o servidor esta ligado e conectado a rede.\nEm caso positivo, entre em contato com o SuporteINFRA para solucionar o problema.">>$LOG
-                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" suporteinfra@shx.com.br < $LOG
+                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" seuemail < $LOG
                         touch $TEMP/falhareplicacao.pid
         elif [ -e $TEMP/sendererro.pid ]
                 then
                         echo -e "Verifique se o servidor esta ligado e conectado a rede.\nEm caso positivo, entre em contato com o SuporteINFRA para solucionar o problema.">>$LOG
-                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" suporteinfra@shx.com.br < $LOG
+                        mail -s "Falha na Replicacao ALERTA - Cliente: [$CLIENTE]" seuemail < $LOG
                         touch $TEMP/falhareplicacao.pid
 	elif [ -e $TEMP/replicadesativada.pid ]
                 then
-			mail -s "Replicacao Desativada ALERTA - Cliente: [$CLIENTE]" suporteinfra@shx.com.br < $LOG
+			mail -s "Replicacao Desativada ALERTA - Cliente: [$CLIENTE]" seuemail < $LOG
         else
-                mail -s "Replicacao OK - Cliente: [$CLIENTE]" suporteinfra@shx.com.br < $LOG
+                mail -s "Replicacao OK - Cliente: [$CLIENTE]" seuemail < $LOG
                 rm -f $TEMP/falhareplicacao.pid
         fi
 }

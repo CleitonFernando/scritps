@@ -91,10 +91,10 @@ enviaemail (){
 	if [ -e $LOGTEMP/erroaplicacao.pid ]
 	 then
 		echo -e "Verifique se o servidor esta ligado e conectado a rede.\nEm caso positivo, entre em contato com o SuporteINFRA para solucionar o problema.">>$LOGTEMP/log_rsync.error.txt
-        	mail -s "Falha na REPLICACAO DE APLICACAO ALERTA - Cliente: [$CLIENTE]" suporteinfra@shx.com.br $EMAILCLIENTE < $LOGTEMP/log_rsync.error.txt
+        	mail -s "Falha na REPLICACAO DE APLICACAO ALERTA - Cliente: [$CLIENTE]" seuemail $EMAILCLIENTE < $LOGTEMP/log_rsync.error.txt
 	else
 		echo "entrei para enviar o email"
-		mail -s "Replicacao OK - Cliente: [$CLIENTE]" suporteinfra@shx.com.br $EMAILCLIENTE < $LOGTEMP/logsincronizacao.txt
+		mail -s "Replicacao OK - Cliente: [$CLIENTE]" seuemail $EMAILCLIENTE < $LOGTEMP/logsincronizacao.txt
 	fi
 }
 

@@ -7,7 +7,7 @@
 #   * As copias de seguranca sao armazenadas em '/BACKUP' por padrao,
 #     Voce pode alterar a variavel $HOME se quiser trocar.
 #
-export PGPASSWORD="senha"
+export PGPASSWORD="suasenha"
 
 ## Diretorio do Backup:
 HOME=/BACKUP
@@ -54,7 +54,7 @@ DATE=`/bin/date "+%Y%m%d%H%M"`
 MAIORBASE=`psql -U postgres -p 5432 -c "select * from (select datname,( select pg_database_size from pg_database_size(datname) ) as tamanho,( select pg_database_size from pg_database_size(datname) ) as tamanho_ordem from pg_database ) aux order by tamanho_ordem desc" | sed '/TESTE/Id' | grep -n ^ | grep ^3: | cut -d: -f2 | awk '{print $1}'`
 CLIENTE=`psql -U postgres -p 5432 $MAIORBASE -c "select cadanome from arqcada where cadatipo='EMPE' order by cadacodi" | grep -n ^ | grep ^3: | cut -d: -f2`
 
-if [ -e "/DADOS/main/standby.signal" ]
+if [ -e "/DADOS/recovery.conf" ]
         then
                 SRV="Replicacao"
                 EXTRAPARAM="--no-synchronized-snapshots"
@@ -80,7 +80,7 @@ dump(){
         exec > >(tee $TEMP/desc.out) 2>&1
         echo "Inicio do backup da base: $db"
         SECONDS=0
-        pg_dump -p 5432 -v -Z6 -U postgres $db -Fd -j$THREADS -f $BKPTEMP/backup$db-$DATE $EXTRAPARAM
+        pg_dump -p 5432 -v -Z6 -U postgres -o $db -Fd -j$THREADS -f $BKPTEMP/backup$db-$DATE $EXTRAPARAM
         TESTEBKP=`echo $?`
         if [ $TESTEBKP == 0 ]
                 then
@@ -198,14 +198,14 @@ fi
 # Dump
 rm -f $HOME/3/* 2> /dev/null
 databases
-if [ -e "/DADOS/main/standby.signal" ]
+if [ -e "/DADOS/recovery.conf" ]
         then
                 psql -U postgres -p 5432 -d postgres -c 'select pg_xlog_replay_pause()'
 fi
 for db in $LISTA; do
         dump; sleep 3; checkdb
 done
-if [ -e "/DADOS/main/standby.signal" ]
+if [ -e "/DADOS/recovery.conf" ]
         then
                 psql -U postgres -p 5432 -d postgres -c 'select pg_xlog_replay_resume()'
 fi
